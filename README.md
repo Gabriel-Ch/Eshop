@@ -1,5 +1,4 @@
 # Eshop
-Eshop Code
 
 
 public class Main
