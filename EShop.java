@@ -1,0 +1,336 @@
+import java.util.ArrayList;
+
+public class EShop
+{
+    private String name;
+    private static Owner owner;
+    private boolean emailChecking;
+    private boolean ownerChecking;
+    private int index;
+    static ArrayList<Item> itemsList = new ArrayList<Item>();
+    static ArrayList<Buyer> buyersList = new ArrayList<Buyer>();
+    ArrayList<Object>  pencilList = new ArrayList<Object>();
+    ArrayList<Object>  paperList = new ArrayList<Object>();
+    ArrayList<Object> penList = new ArrayList<Object>();
+    ArrayList<Object> noteList = new ArrayList<Object>();
+    ArrayList<Object> items = new ArrayList<Object>();
+    ArrayList<Object> buyers = new ArrayList<Object>();
+    
+    
+    public EShop(String name,Owner owner)
+    {
+        this.name = name;
+        this.owner = owner;
+        
+    }
+ 
+    public void addItem(Item item) throws AddTheSameItemException,AddTheSameIDException
+    {
+       if(itemsList.contains(item))
+       {
+          throw new AddTheSameItemException(item,itemsList);
+       }
+       
+       for(Item items: itemsList)
+       {
+           if(item.getID() == items.getID())
+           {
+               throw new AddTheSameIDException(item,items,itemsList);
+           }
+       }
+        
+       itemsList.add(item);
+    } 
+    
+    public Item getItemByld(int id) throws WrongIDException
+    {
+       try
+       { 
+         for(Item items: itemsList)
+         {
+             if(id == items.getID())
+             {
+                 id = itemsList.indexOf(items);
+             }
+         }
+          
+         return itemsList.get(id);
+       }
+       catch(IndexOutOfBoundsException e)
+       {
+           throw new WrongIDException();
+       }
+    }
+    
+    public void removeItem(Item item)
+    {
+        itemsList.remove(item);
+    }
+    
+    public static void addBuyer(Buyer buyer) throws AddTheSameBuyerException 
+    {
+        if(buyersList.contains(buyer))
+        {
+            throw new AddTheSameBuyerException();
+        }
+        
+        buyersList.add(buyer);
+    }
+    
+    public void removeBuyer(Buyer buyer)
+    {
+        buyersList.remove(buyer);
+    }
+    
+    public void updateItemStock(Item item,int newStock) throws NotAQuantityException 
+    {
+        if(newStock < 0)
+        {
+            throw new NotAQuantityException();
+        }
+        
+        item.setStock(newStock);
+    }
+    
+    public void showCategories()
+    {
+        for(Object items: itemsList)
+        {
+           System.out.println(items.getClass().getName());
+        }
+    }
+    
+    public void showProductsInCategory(String epilogh)
+    {
+    
+        for(Object items: itemsList)
+        {
+            String category = items.getClass().getName(); 
+            
+            switch(category)
+            {
+                case "Pen": 
+                penList.add(items);
+                break;
+                
+                case "Pencil":
+                pencilList.add(items);
+                break;
+                
+                case "Paper":
+                paperList.add(items);
+                break;
+                
+                case "Notebook":
+                noteList.add(items);
+                break;
+            }
+        }
+        
+        switch(epilogh)
+        {
+            case "3.Pen":
+            if(! penList.isEmpty())
+            {
+              for(Object pen: penList)
+              {
+                 String item = (showProduct((Pen)pen));
+                 items.add(item);
+              }
+            }
+            else
+            {
+                String item ="This Category has no products";
+                items.add(item);
+            }
+            break;
+            
+            case "4.Pencil":
+            if(! pencilList.isEmpty())
+            {
+              for(Object pencil: pencilList)
+              {
+                 String item = (showProduct((Pencil)pencil));
+                 items.add(item);
+              }
+            }
+            else
+            {
+               String item ="This Category has no products";
+               items.add(item);
+            }
+            break;
+            
+            case "2.Paper":
+            if(! paperList.isEmpty())
+            {
+              for(Object paper: paperList)
+              {
+                String item = (showProduct((Paper)paper));
+                items.add(item);
+              }
+            }
+            else
+            {
+               String item ="This Category has no products";
+               items.add(item);
+            }
+            break;
+            
+            case "1.Notebook":
+            if(! noteList.isEmpty())
+            {
+              for(Object notebook: noteList)
+              {
+                String item = (showProduct((Notebook)notebook));
+                items.add(item);
+              }
+            }
+            else
+            {
+               String item ="This Category has no products";
+               items.add(item);
+            }
+            break;
+        }
+    }
+     
+    public String showProduct(Item item)
+    {
+       int orderNumber = itemsList.indexOf(item);
+       
+       String product;
+       
+       if(orderNumber > 9)
+       {
+          product = "Order Number: " + "00" + orderNumber + "   " + itemsList.get(orderNumber).showProducts();
+       }
+       else if(orderNumber > 99)
+       {
+           product = "Order Number: " + "0" + orderNumber + "   " + itemsList.get(orderNumber).showProducts();
+       }
+       else if(orderNumber > 999)
+       {
+           product = "Order Number: " + orderNumber + "   " + itemsList.get(orderNumber).showProducts();
+       }
+       else
+       {
+           product = "Order Number: " + "000" + orderNumber + "   " + itemsList.get(orderNumber).showProducts();
+       }
+       
+       return product;
+    }
+    
+    public void checkStatus()
+    {
+        for(Buyer buyer: buyersList)
+        {
+            if( ! buyersList.isEmpty() )
+            {
+                String status = buyer.getStatus();
+                buyers.add(status);
+            }
+            else
+            {
+                 String status = "The shop has none registrations yet ";
+                 buyers.add(status);
+            }
+        }
+    }
+    
+    public ArrayList getBuyersList()
+    {
+        return buyersList;
+    }
+    
+    public ArrayList getItemsList()
+    {
+        return itemsList;
+    }
+    
+     public ArrayList getPaperList()
+    {
+        return paperList;
+    }
+    
+    public ArrayList getPencilList()
+    {
+        return pencilList;
+    }
+    
+    public ArrayList getPenList()
+    {
+        return penList;
+    }
+    
+    public ArrayList getNoteList()
+    {
+        return noteList;
+    }
+    
+    public ArrayList getItems()
+    {
+        return items;
+    }
+    
+    public String getEshopName()
+    {
+        return name;
+    }
+    
+    public Owner getOwner()
+    {
+        return owner;
+    }
+    
+    public boolean emailCheck(String email)
+    {
+        
+        for(Buyer buyer: buyersList)
+        {               
+            if (email.equals(buyer.getEmail()))
+            {
+                emailChecking = true;
+            }
+            else
+            {
+                emailChecking = false;
+            }
+        }
+        
+        return emailChecking;
+    }
+    
+    public boolean ownerCheck(String email)
+    {        
+       if (email.equals(owner.getEmail()))
+       {
+           ownerChecking = true;
+       }
+       else
+       {
+           ownerChecking = false;
+       }
+        
+        
+       return ownerChecking;
+    }
+    
+    public Buyer getBuyer(String email)
+    {
+        for(Buyer buyer: buyersList)
+         {   
+            if (email.equals(buyer.getEmail()))
+            {
+                index = buyersList.indexOf(buyer);
+            }
+        }
+         
+        return buyersList.get(index);
+    }
+    
+    public ArrayList getBuyers()
+    {
+        return buyers;
+    }
+}
