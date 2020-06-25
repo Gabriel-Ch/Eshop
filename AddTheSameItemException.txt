@@ -1,0 +1,9 @@
+import java.util.ArrayList;
+
+public class AddTheSameItemException extends Exception
+{ 
+    public AddTheSameItemException(Item item,ArrayList itemsList)
+    {
+       System.out.println("You have already add the product " + item.getID() + " once");
+    }
+}
